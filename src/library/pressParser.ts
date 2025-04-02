@@ -75,7 +75,7 @@ export function parsePressBlocks(document: string): pressBlock[] {
 	// add potential last piece of text;
 	pressBlocks.push({
 		type: pressBlockType.TEXT,
-		text: document.slice(lastIndex, -1) // not sure if this is alright yet..
+		text: document.slice(lastIndex) // not sure if this is alright yet..
 	})
 
 	return pressBlocks;

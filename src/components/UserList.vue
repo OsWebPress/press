@@ -1,17 +1,18 @@
 <script lang="ts">
-	import axios from 'axios';
 	import instance from '@/main.ts'
 	import { ref, onMounted } from 'vue'
 	import { useTokenStore } from '@/stores/token'
 	import EditableUserCard from '@/components/EditableUserCard.vue'
+	import NewUserCard from '@/components/NewUserCard.vue'
 	export default {
 		components: {
 			EditableUserCard,
+			NewUserCard,
 		},
 		setup() {
-			const userlist = ref()
+			const userlist = ref([])
 
-			onMounted(async () => {
+			const getUsers = async () => {
 				try {
 					const response = await instance.get('/admin/users');
 					console.log(response);
@@ -19,15 +20,21 @@
 				} catch (error) {
 					console.error("Error fetching users:", error);
 				}
+				console.log('getUsers called')
+			}
+
+			onMounted(async () => {
+				getUsers();
 			});
 
-			return { userlist }
+			return { userlist, getUsers }
 		},
 	};
 </script>
 
 <template>
-	<div class="rounded-lg p-2 border-2 border-green-200">
-		<EditableUserCard v-for="user in userlist" :user/>
+	<div class="rounded-lg p-2 border-2 border-green-200 w-full max-h-128 overflow-y-auto">
+		<NewUserCard class="w-full" @addUser="getUsers"/>
+		<EditableUserCard v-for="user in userlist" :user :key="user.id" class="w-full"/>
 	</div>
 </template>
