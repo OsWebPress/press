@@ -1,5 +1,5 @@
 <script setup>
-import instance from '@/main.ts'
+import { myAxios } from '@/main.ts'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits();
@@ -16,7 +16,7 @@ const toggleEdit = () => {
 const saveUser = async () => {
 	// send a request to the instacne backend with the updated info
 	try {
-		const response = await instance.post('/admin/user', {username: username.value, password: password.value, role: selectedRole.value});
+		const response = await myAxios.post('/admin/user', {username: username.value, password: password.value, role: selectedRole.value});
 		console.log(response.data);
 		emit('addUser');
 	} catch (error) {

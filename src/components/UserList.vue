@@ -1,5 +1,5 @@
 <script lang="ts">
-	import instance from '@/main.ts'
+	import { myAxios } from '@/main.ts'
 	import { ref, onMounted } from 'vue'
 	import { useTokenStore } from '@/stores/token'
 	import EditableUserCard from '@/components/EditableUserCard.vue'
@@ -14,7 +14,7 @@
 
 			const getUsers = async () => {
 				try {
-					const response = await instance.get('/admin/users');
+					const response = await myAxios.get('/admin/users');
 					console.log(response);
 					userlist.value = response.data; // This correctly updates the reactive ref
 				} catch (error) {

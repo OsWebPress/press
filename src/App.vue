@@ -7,8 +7,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="wrapper flex justify-center items-center">
 
       <nav>
-        <RouterLink to="/render">Render_test</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/test">Test</RouterLink>
         <RouterLink to="/admin">Admin</RouterLink>
         <RouterLink to="/admin/editor">Editor</RouterLink>
       </nav>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { parsePressBlocks, pressBlockType } from '@/library/pressParser';
+import Markdown from '@/components/Markdown.vue'
 
 const props = defineProps({
   document: String,
@@ -22,7 +23,8 @@ const parsedData = computed(() => {
     <component v-if="block.type === pressBlockType.COMPONENT" :is="block.name"><span v-html="block.slot"></span></component>
 
     <div v-else>
-      <pre>{{ block.text }}</pre>
+      <!-- <pre>{{ block.text }}</pre> -->
+       <Markdown :markdown="block.text"/>
     </div>
   </div>
 </div>

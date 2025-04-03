@@ -36,4 +36,4 @@ instance.interceptors.request.use(config => {
 
 instance.defaults.baseURL = 'http://localhost:8080';
 
-export default instance;
+export const myAxios = instance;

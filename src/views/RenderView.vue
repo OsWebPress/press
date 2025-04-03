@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import instance from '@/main.ts';
+import { myAxios } from '@/main.ts';
 import { useRoute } from 'vue-router';
 import Rendering from '@/components/Rendering.vue'
 
@@ -14,7 +14,7 @@ onMounted(async () => {
 
 async function getDocument(route: string)  {
 	try {
-		const response = await instance.get("carbon" + route);
+		const response = await myAxios.get("carbon" + route);
 
 		document.value = response.data;
 

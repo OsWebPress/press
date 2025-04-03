@@ -6,7 +6,7 @@ import { EditorState, StateField } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { markdown } from '@codemirror/lang-markdown';
 
-import instance  from '@/main.ts'
+import { myAxios } from '@/main.ts'
 
 const file = ref('')
 const codemirrorRef = ref(null);
@@ -15,7 +15,7 @@ const saved = ref('');
 
 async function getDocument()  {
 	try {
-		const response = await instance.get("carbon/" + file.value);
+		const response = await myAxios.get("carbon/" + file.value);
 
 		updateDocument(response.data);
 
@@ -26,7 +26,7 @@ async function getDocument()  {
 
 async function postDocument() {
 	try {
-		const response = await instance.post("carbon/" + file.value, mirrorView.value.state.doc.toString());
+		const response = await myAxios.post("carbon/" + file.value, mirrorView.value.state.doc.toString());
 		saved.value = '';
 
 	} catch (error) {
