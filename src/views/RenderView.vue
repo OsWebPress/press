@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount, defineAsyncComponent } from 'vue';
 import { myAxios } from '@/main.ts';
 import { useRoute } from 'vue-router';
 import Rendering from '@/components/Rendering.vue'
 
 const route = useRoute();
 const document = ref("");
+const loading = ref(true);
 
+onBeforeMount(async () => {
+	document.value = await getDocument(route.fullPath);
+	loading.value = false;
 
-onMounted(async () => {
-	await getDocument(route.fullPath);
 })
 
-async function getDocument(route: string)  {
+async function getDocument(route: string) : Promise<string> {
 	try {
 		const response = await myAxios.get("carbon" + route);
-
-		document.value = response.data;
+		return response.data
 
 	} catch (error) {
 		console.error("error fetching document", error);
 	}
+	return "";
 }
 
 </script>
@@ -28,7 +30,8 @@ async function getDocument(route: string)  {
 <template>
   <main>
 
-	<Rendering :document/>
+	<div v-if="loading">loading..</div>
+	<Rendering v-else :document="document"/>
 
   </main>
 </template>

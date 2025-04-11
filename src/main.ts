@@ -5,18 +5,19 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import Info from './components/Info.vue'
 import axios from 'axios'
 import { useTokenStore } from './stores/token'
 
-const app = createApp(App)
+export const app = createApp(App)
+
+// Expose Vue globally
+// @ts-ignore
+window.Vue = app._context.app.constructor
 
 app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
-
-app.component('Info', Info)
 
 axios.defaults.baseURL = 'http://localhost:8080'; // hardcoded dev env.
 

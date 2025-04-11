@@ -1,29 +1,35 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { parsePressBlocks, pressBlockType } from '@/library/pressParser';
 import Markdown from '@/components/Markdown.vue'
+import LoadComponent from '@/components/LoadComponent.vue'
 
 const props = defineProps({
   document: String,
 });
 
-const parsedData = computed(() => {
-  if (props.document !== undefined) {
-    return parsePressBlocks(props.document);
+const parsedData = ref([]);
+
+onMounted(() => {
+  if (props.document !== undefined && props.document !== ""){
+    parsedData.value = parsePressBlocks(props.document);
   }
-  return {};
+  setTimeout(() => {
+    parsedData.value = [...parsedData.value]
+  }, 1000)
 })
+
+
 
 </script>
 
 <template>
 
 <div class="absolute top-1/16 left-1/16">
-  <div v-for="block in parsedData">
-    <component v-if="block.type === pressBlockType.COMPONENT" :is="block.name"><span v-html="block.slot"></span></component>
+  <div v-for="(block, index) in parsedData" :key="index">
+	<LoadComponent v-if="block.type === pressBlockType.COMPONENT" :component='block.name'><span v-html="block.slot"></span></LoadComponent>
 
     <div v-else>
-      <!-- <pre>{{ block.text }}</pre> -->
        <Markdown :markdown="block.text"/>
     </div>
   </div>
