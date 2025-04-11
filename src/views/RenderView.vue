@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount, defineAsyncComponent } from 'vue';
-import { myAxios } from '@/main.ts';
+import { ref, onBeforeMount, watch } from 'vue';
+import { myAxios } from '@/axios.ts';
 import { useRoute } from 'vue-router';
 import Rendering from '@/components/Rendering.vue'
 
@@ -13,6 +13,12 @@ onBeforeMount(async () => {
 	loading.value = false;
 
 })
+
+watch(route, async (newRoute) => {
+	loading.value = true;
+	document.value = await getDocument(route.fullPath);
+	loading.value = false;
+});
 
 async function getDocument(route: string) : Promise<string> {
 	try {

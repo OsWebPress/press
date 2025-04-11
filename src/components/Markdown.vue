@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { marked } from 'marked';
-import '@/user/markdown.css';
+import '@/assets/markdown.css';
 
 const props = defineProps({
 	markdown: String,

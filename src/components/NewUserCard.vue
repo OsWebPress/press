@@ -1,6 +1,6 @@
 <script setup>
-import { myAxios } from '@/main.ts'
-import { ref, onMounted } from 'vue'
+import { myAxios } from '@/axios.ts'
+import { ref } from 'vue'
 
 const emit = defineEmits();
 

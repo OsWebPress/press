@@ -18,11 +18,6 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       name: 'renderer', // need to make this nicer, maybe configurable or get from markdown
       component: () => import('@/views/RenderView.vue'),
-    },
-    {
-      path: '/testing',
-      name: 'testing',
-      component: () => import('@/views/TestingView.vue'),
     }
   ],
 

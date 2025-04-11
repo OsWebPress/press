@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { myAxios } from '@/main.ts'
+	import { myAxios } from '@/axios.ts'
 	import { ref, onMounted } from 'vue'
 	import { useTokenStore } from '@/stores/token'
 	import EditableUserCard from '@/components/EditableUserCard.vue'

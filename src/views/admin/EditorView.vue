@@ -2,11 +2,11 @@
 import { ref, onMounted } from 'vue';
 import { EditorView, keymap, lineNumbers } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
-import { EditorState, StateField } from '@codemirror/state';
+import { EditorState } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { markdown } from '@codemirror/lang-markdown';
 
-import { myAxios } from '@/main.ts'
+import { myAxios } from '@/axios.ts'
 
 const file = ref('')
 const codemirrorRef = ref(null);

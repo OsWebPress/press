@@ -1,5 +1,5 @@
 <script setup>
-import { myAxios } from '@/main.ts'
+import { myAxios } from '@/axios.ts'
 import { ref, onMounted } from 'vue'
 
 const editable = ref('solid');
