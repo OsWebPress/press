@@ -35,12 +35,6 @@ function extractPressComponentBlock(document: string, match: RegExpExecArray): {
 		endIndex = match.index + closingTag!.index + closingTag![0].length;
 		slot = document.substring(match.index + match[0].length, next_index);
 		const tmpEndIndex = document.indexOf(">", next_index);
-		// endIndex = tmpEndIndex !== -1 ? tmpEndIndex + 1 : -1;
-
-		// <Info></Info>
-		// <Info></Info>
-		// 6 13 14 6
-		console.log(next_index, endIndex, match.index, closingTag!.index);
 	} else {
 		const tmpEndIndex = document.indexOf('>', match.index);
 		endIndex = tmpEndIndex == -1 ? -1 : tmpEndIndex + 1

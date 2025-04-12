@@ -4,13 +4,10 @@ import LoadNav from '@/components/LoadNav.vue'
 </script>
 
 <template>
+	<header class="fixed top-0 left-0 w-full shadow-md z-50">
+		<LoadNav />
+	</header>
 	<div>
-		<header class="fixed top-0 left-0 w-full shadow-md z-50 p-4">
-			<LoadNav />
-		</header>
-	</div><div>
-
-
 		<RouterView />
 	</div>
 

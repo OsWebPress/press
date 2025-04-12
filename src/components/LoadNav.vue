@@ -13,13 +13,10 @@ onMounted(async () => {
 	importedComponent.value = await loadComponent('http://localhost:8080/navigation.vue');
 	navigationData.value = response.data
 	loaded.value = true
-	console.log("nav data:", response);
 })
 
 </script>
 
 <template>
-	<div>
-		<component v-if="loaded" :is=importedComponent :navigationData='navigationData'><slot></slot></component>
-	</div>
+	<component v-if="loaded" :is=importedComponent :navigationData='navigationData'><slot></slot></component>
 </template>

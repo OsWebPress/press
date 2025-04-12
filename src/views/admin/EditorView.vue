@@ -5,17 +5,34 @@ import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { EditorState } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { markdown } from '@codemirror/lang-markdown';
-
 import { myAxios } from '@/axios.ts'
+import LegendDirectory from '@/components/LegendDirectory.vue'
 
 const file = ref('')
 const codemirrorRef = ref(null);
 const mirrorView = ref(null)
 const saved = ref('');
+const files_json = ref([]);
 
 async function getDocument()  {
 	try {
 		const response = await myAxios.get("carbon/" + file.value);
+
+		updateDocument(response.data);
+
+	} catch (error) {
+		console.error("error fetching document", error);
+	}
+}
+
+async function openDocument(path) {
+	// Need to make a selector to do differetn stuff based on the directory we are trying to work in.
+
+
+
+	console.log("here:", path)
+	try {
+		const response = await myAxios.get(path.replace(/\.md$/, ''));
 
 		updateDocument(response.data);
 
@@ -48,7 +65,7 @@ function setUnsaved() {
 	saved.value = '•';
 }
 
-onMounted(() => {
+onMounted(async () => {
     if (codemirrorRef.value) {
         let startState = EditorState.create({
             doc: 'Select a file before editing!',
@@ -79,12 +96,17 @@ onMounted(() => {
 			],
         });
     }
+	const response = await myAxios.get('ronly/files')
+	files_json.value = response.data;
+	console.log(response.data)
 });
 </script>
 
-<template>
-<div class="absolute top-1/16 left-0 border-green-500 border-2 w-full h-15/16 flex">
-	<div class="w-1/4 border-blue-500 border-2 h-full"></div>
+<template class="bg-black">
+<div class="absolute top-1/16 left-0 border-green-500 border-2 w-full h-15/16 flex bg-black">
+	<div class="w-1/4 border-blue-500 border-2 h-full">
+		<LegendDirectory :dir="files_json" @openFile="openDocument" />
+	</div>
 	<div class="w-3/4 border-red-500 border-2 flex-grow">
 		<div class="h-10">
 			<input v-model="file" placeholder="file:" class="rounded-sm bg-orange-200 text-black" />
