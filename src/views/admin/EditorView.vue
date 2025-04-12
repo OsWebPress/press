@@ -13,56 +13,56 @@ const codemirrorRef = ref(null);
 const mirrorView = ref(null)
 const saved = ref('');
 const files_json = ref([]);
+const activePath = ref(undefined)
+const context = ref({});
+// context: {<path>: {name, content}}
 
-async function getDocument()  {
+async function setActiveEditor(doc) {
+	if (doc.path === activePath.value)
+		return;
+	if (doc.path in context.value) {
+		updateDocument(doc.path)
+	}
 	try {
-		const response = await myAxios.get("carbon/" + file.value);
-
-		updateDocument(response.data);
+		const response = await myAxios.get(doc.path.replace(/\.md$/, ''));
+		const page = {name: doc.name, content: response.data};
+		context.value[doc.path] = page;
+		updateDocument(doc.path);
 
 	} catch (error) {
 		console.error("error fetching document", error);
 	}
 }
 
-async function openDocument(path) {
-	// Need to make a selector to do differetn stuff based on the directory we are trying to work in.
+function updateDocument(newDocPath) {
+    if (mirrorView.value) {
+		// set old context
+		if (activePath.value !== undefined) {
+			context.value[activePath.value].content = mirrorView.value.state.doc.toString();
+		}
 
-
-
-	console.log("here:", path)
-	try {
-		const response = await myAxios.get(path.replace(/\.md$/, ''));
-
-		updateDocument(response.data);
-
-	} catch (error) {
-		console.error("error fetching document", error);
-	}
+		activePath.value = newDocPath;
+		mirrorView.value.dispatch({
+            changes: { from: 0, to: mirrorView.value.state.doc.length, insert: context.value[newDocPath].content },
+        });
+		context.value[activePath.value].saved = " ";
+    }
 }
 
-async function postDocument() {
+function setUnsaved() {
+	context.value[activePath.value].saved = '•';
+}
+
+async function saveFile() {
 	try {
-		const response = await myAxios.post("carbon/" + file.value, mirrorView.value.state.doc.toString());
-		saved.value = '';
+		const response = await myAxios.post(activePath.value.replace(/\.md$/, ''), mirrorView.value.state.doc.toString());
+		saved.value = '   ';
 
 	} catch (error) {
 		console.error("error posting the document", error);
 		// add prompt to login here.
 		// can be achieved with the login widget as overlay.
 	}
-}
-
-function updateDocument(newDoc) {
-    if (mirrorView.value) {
-		mirrorView.value.dispatch({
-            changes: { from: 0, to: mirrorView.value.state.doc.length, insert: newDoc },
-        });
-    }
-}
-
-function setUnsaved() {
-	saved.value = '•';
 }
 
 onMounted(async () => {
@@ -72,7 +72,13 @@ onMounted(async () => {
             extensions: [
                 oneDark,
                 lineNumbers(),
-                keymap.of([...defaultKeymap, ...historyKeymap]),
+                keymap.of([...defaultKeymap, ...historyKeymap,
+				{
+                key: 'Mod-s',
+                preventDefault: true,
+                run: saveFile,
+              },
+				]),
                 history(),
 				markdown(),
 				EditorView.updateListener.of(function(e) {
@@ -98,20 +104,29 @@ onMounted(async () => {
     }
 	const response = await myAxios.get('ronly/files')
 	files_json.value = response.data;
-	console.log(response.data)
 });
 </script>
 
 <template class="bg-black">
 <div class="absolute top-1/16 left-0 border-green-500 border-2 w-full h-15/16 flex bg-black">
 	<div class="w-1/4 border-blue-500 border-2 h-full">
-		<LegendDirectory :dir="files_json" @openFile="openDocument" />
+		<LegendDirectory :dir="files_json" @openFile="setActiveEditor" />
 	</div>
 	<div class="w-3/4 border-red-500 border-2 flex-grow">
-		<div class="h-10">
-			<input v-model="file" placeholder="file:" class="rounded-sm bg-orange-200 text-black" />
-			<button @click="getDocument" class="px-2 rounded-lg bg-teal-600 text-white">get</button>
-			<button @click="postDocument" class="px-2 rounded-lg bg-amber-600 text-white">Post {{ saved }} </button>
+		<div class="h-8 border-white border-1 flex-grow flex">
+			<div class="flex-none" v-for="(item, identifier) in context">
+				<button v-if="identifier === activePath"
+					class="text-white px-4 border-teal-600 border-4 h-full">
+					{{item.name}} {{item.saved}}
+				</button>
+				<button v-else
+					@click="updateDocument(identifier)"
+					class="text-white px-4 barder-white border-1 h-full">
+					{{item.name}} {{item.saved}}
+				</button>
+
+			</div>
+			<!-- add the tabs here -->
 		</div>
 		<div ref="codemirrorRef" class="top-0 left-0 w-full h-full overflow-y-auto"></div>
 	</div>

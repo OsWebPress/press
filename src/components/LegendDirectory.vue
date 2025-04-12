@@ -9,8 +9,8 @@ const props = defineProps({
 
 const emit = defineEmits();
 
-function emitFile(path) {
-	emit("openFile", path)
+function emitFile(page) {
+	emit("openFile", page)
 }
 
 </script>
@@ -22,7 +22,7 @@ function emitFile(path) {
 			<LegendDirectory v-if="child.is_dir" :dir="child" @openFile="emitFile" />
 			<button
 			v-else
-			@click="emitFile(child.path)"
+			@click="emitFile(child)"
 			class="px-2 border-b border-white border-b-1 cursor-pointer">
 			{{child.name}}</button>
 		</div>
