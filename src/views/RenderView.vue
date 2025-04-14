@@ -3,6 +3,7 @@ import { ref, onBeforeMount, watch } from 'vue';
 import { myAxios } from '@/axios.ts';
 import { useRoute } from 'vue-router';
 import Rendering from '@/components/Rendering.vue'
+import LoadNav from '@/components/LoadNav.vue'
 
 const route = useRoute();
 const document = ref("");
@@ -20,20 +21,28 @@ watch(route, async (newRoute) => {
 	loading.value = false;
 });
 
-async function getDocument(route: string) : Promise<string> {
+async function getDocument(route: string): Promise<string> {
 	try {
 		const response = await myAxios.get("carbon" + route);
-		return response.data
-
+		return response.data;
 	} catch (error) {
-		console.error("error fetching document", error);
+		if (route !== '/404') {
+			return await getDocument('/404');
+		} else {
+			console.error("error fetching /404 document", error);
+			return "404 page unavailable";
+		}
 	}
-	return "";
 }
 
 </script>
 
 <template>
+	<header>
+		<div class="fixed w-full z-50">
+			<LoadNav />
+		</div>
+	</header>
   <main>
 
 	<div v-if="loading">loading..</div>

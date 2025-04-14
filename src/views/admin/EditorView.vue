@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { EditorView, keymap, lineNumbers } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { EditorState } from '@codemirror/state';
@@ -7,15 +7,19 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { markdown } from '@codemirror/lang-markdown';
 import { myAxios } from '@/axios.ts'
 import LegendDirectory from '@/components/LegendDirectory.vue'
+import LoadNav from '@/components/LoadNav.vue'
+import navData from '@/assets/adminNavigation.json'
+import { useTokenStore } from '@/stores/token';
+import Login from '@/components/Login.vue';
 
-const file = ref('')
+const tokenstore = useTokenStore();
 const codemirrorRef = ref(null);
 const mirrorView = ref(null)
 const saved = ref('');
 const files_json = ref([]);
 const activePath = ref(undefined)
 const context = ref({});
-// context: {<path>: {name, content}}
+const login = ref(false)
 
 async function setActiveEditor(doc) {
 	if (doc.path === activePath.value)
@@ -104,12 +108,28 @@ onMounted(async () => {
     }
 	const response = await myAxios.get('ronly/files')
 	files_json.value = response.data;
+
+	watch(() => tokenstore.token, (newValue) => {
+    if (newValue !== '') {
+      login.value = false
+    //   const decodedToken = jwtDecode(newValue);
+    //   role.value = decodedToken.role || null;
+    } else {
+      login.value = true;
+    }
+  }, { immediate: true });
 });
 </script>
 
-<template class="bg-black">
-<div class="absolute top-1/16 left-0 border-green-500 border-2 w-full h-15/16 flex bg-black">
-	<div class="w-1/4 border-blue-500 border-2 h-full">
+<template>
+<Login class="absolute top-1/4 left-1/6" v-if="login"/>
+
+<div class="h-screen flex flex-col">
+	<div class="w-full z-50">
+		<LoadNav :navData />
+	</div>
+<div class="border-green-500 border-2 flex flex-grow bg-black">
+	<div class="w-1/4 border-blue-500 border-2 ">
 		<LegendDirectory :dir="files_json" @openFile="setActiveEditor" />
 	</div>
 	<div class="w-3/4 border-red-500 border-2 flex-grow">
@@ -128,8 +148,9 @@ onMounted(async () => {
 			</div>
 			<!-- add the tabs here -->
 		</div>
-		<div ref="codemirrorRef" class="top-0 left-0 w-full h-full overflow-y-auto"></div>
+		<div ref="codemirrorRef" class="top-0 left-0 w-full h-auto overflow-y-auto"></div>
 	</div>
 
+</div>
 </div>
 </template>

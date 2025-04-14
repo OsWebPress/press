@@ -1,0 +1,19 @@
+[
+	{
+		"text": "home",
+		"url": "/",
+		"image": "/images/home.ico"
+	},
+	{
+		"text": "test",
+		"url": "/test"
+	},
+	{
+		"text": "admin",
+		"url": "/admin"
+	},
+	{
+		"text": "editor",
+		"url": "/admin/editor"
+	}
+]
