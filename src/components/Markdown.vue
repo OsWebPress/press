@@ -13,7 +13,7 @@ const html_content = computed(() => {
 		breaks: true,
 	})
 
-	return marked.parse(props.markdown);
+	return marked.parse(props.markdown.replace(/^>\s*$/gm, '> &nbsp;').replace(/^\s*$/gm, '\n<br>\n'));
 })
 
 </script>

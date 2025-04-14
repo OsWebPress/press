@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/admin/editor',
       name: 'editor',
-      component: () => import('@/views/admin/EditorView.vue'),
+      component: () => import('@/views/EditorView.vue'),
     },
     {
       path: '/:pathMatch(.*)*',

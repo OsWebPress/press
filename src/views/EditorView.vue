@@ -15,7 +15,6 @@ import Login from '@/components/Login.vue';
 const tokenstore = useTokenStore();
 const codemirrorRef = ref(null);
 const mirrorView = ref(null)
-const saved = ref('');
 const files_json = ref([]);
 const activePath = ref(undefined)
 const context = ref({});
@@ -32,6 +31,7 @@ async function setActiveEditor(doc) {
 		const page = {name: doc.name, content: response.data};
 		context.value[doc.path] = page;
 		updateDocument(doc.path);
+		context.value[activePath.value].saved = '✔';
 
 	} catch (error) {
 		console.error("error fetching document", error);
@@ -40,6 +40,7 @@ async function setActiveEditor(doc) {
 
 function updateDocument(newDocPath) {
     if (mirrorView.value) {
+		const saved = context.value[newDocPath].saved;
 		// set old context
 		if (activePath.value !== undefined) {
 			context.value[activePath.value].content = mirrorView.value.state.doc.toString();
@@ -49,18 +50,18 @@ function updateDocument(newDocPath) {
 		mirrorView.value.dispatch({
             changes: { from: 0, to: mirrorView.value.state.doc.length, insert: context.value[newDocPath].content },
         });
-		context.value[activePath.value].saved = " ";
+		context.value[newDocPath].saved = saved
     }
 }
 
 function setUnsaved() {
-	context.value[activePath.value].saved = '•';
+	context.value[activePath.value].saved = '🛑';
 }
 
 async function saveFile() {
 	try {
 		const response = await myAxios.post(activePath.value.replace(/\.md$/, ''), mirrorView.value.state.doc.toString());
-		saved.value = '   ';
+		context.value[activePath.value].saved = '✔'
 
 	} catch (error) {
 		console.error("error posting the document", error);
@@ -136,12 +137,13 @@ onMounted(async () => {
 		<div class="h-8 border-white border-1 flex-grow flex">
 			<div class="flex-none" v-for="(item, identifier) in context">
 				<button v-if="identifier === activePath"
-					class="text-white px-4 border-teal-600 border-4 h-full">
+					@click="saveFile"
+					class="text-white px-4 border-teal-600 border-4 h-full cursor-pointer">
 					{{item.name}} {{item.saved}}
 				</button>
 				<button v-else
 					@click="updateDocument(identifier)"
-					class="text-white px-4 barder-white border-1 h-full">
+					class="text-white px-4 barder-white border-1 h-full cursor-pointer">
 					{{item.name}} {{item.saved}}
 				</button>
 

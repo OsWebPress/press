@@ -52,10 +52,15 @@ export function parsePressBlocks(document: string): pressBlock[] {
 
 	while (lastIndex != -1 && (match = regex.exec(document))) {
 		if (match.index != lastIndex) {
-			pressBlocks.push({
-				type: pressBlockType.TEXT,
-				text: document.slice(lastIndex, match.index)
-			})
+			let text = document.slice(lastIndex, match.index)
+			if (text.startsWith('\n'))
+				text = text.slice(1)
+			if (text !== "") {
+				pressBlocks.push({
+					type: pressBlockType.TEXT,
+					text: text
+				})
+			}
 			// extract a text block
 		}
 		// isolate the component
