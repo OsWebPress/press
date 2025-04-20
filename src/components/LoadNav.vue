@@ -11,12 +11,13 @@ const loaded = ref(false)
 
 onMounted(async () => {
 	if (props.navData === undefined) {
-		const response = await myAxios.get('navigation/data');
+		const response = await myAxios.get('navigation/navigation.json');
 		navigationData.value = response.data
 	} else {
 		navigationData.value = props.navData
 	}
-	importedComponent.value = await loadComponent(`${API_URL}/navigation.vue`);
+	importedComponent.value = await loadComponent(`${API_URL}/navigation/active.vue`);
+
 	loaded.value = true;
 })
 

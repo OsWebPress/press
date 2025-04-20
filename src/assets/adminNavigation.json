@@ -15,5 +15,9 @@
 	{
 		"text": "editor",
 		"url": "/admin/editor"
+	},
+	{
+		"text": "gallery",
+		"url": "/admin/images"
 	}
 ]

@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('@/views/EditorView.vue'),
     },
     {
+		path: '/admin/images',
+		name: 'gallery',
+		component: () => import('@/views/ImageGalleryView.vue'),
+	  },
+    {
       path: '/:pathMatch(.*)*',
       name: 'renderer', // need to make this nicer, maybe configurable or get from markdown
       component: () => import('@/views/RenderView.vue'),

@@ -15,10 +15,11 @@ import Login from '@/components/Login.vue';
 const tokenstore = useTokenStore();
 const codemirrorRef = ref(null);
 const mirrorView = ref(null)
-const files_json = ref([]);
+const filesJson = ref([]);
 const activePath = ref(undefined)
 const context = ref({});
 const login = ref(false)
+const selectedPath = ref('')
 
 async function setActiveEditor(doc) {
 	if (doc.path === activePath.value)
@@ -27,7 +28,13 @@ async function setActiveEditor(doc) {
 		updateDocument(doc.path)
 	}
 	try {
-		const response = await myAxios.get(doc.path.replace(/\.md$/, ''));
+		const response = await myAxios.get(doc.path, {
+        transformResponse: (res) => {
+            // Do your own parsing here if needed ie JSON.parse(res);
+            return res;
+        },
+        responseType: 'text'
+    	});
 		const page = {name: doc.name, content: response.data};
 		context.value[doc.path] = page;
 		updateDocument(doc.path);
@@ -38,8 +45,31 @@ async function setActiveEditor(doc) {
 	}
 }
 
+function setSelectedPath(doc) {
+	selectedPath.value = doc.path
+}
+
+// funciton can be optimized by first creating the context in the frontend and then adding the file to the backend.
+async function createFile(path) {
+	console.log(path)
+	try {
+		await myAxios.post(path, "");
+		const response = await myAxios.get('ronly/files')
+		filesJson.value = response.data;
+		setActiveEditor({path: path, name: path.split("/").pop()})
+	} catch (error) {
+		console.error("error posting the document", error);
+	}
+}
+
+async function deleteFile(path) {
+	// delete context.value[path] // do we want to get rid of the context right away?
+	const response = await myAxios.get('ronly/files')
+	filesJson.value = response.data;
+}
+
 function updateDocument(newDocPath) {
-    if (mirrorView.value) {
+	if (mirrorView.value) {
 		const saved = context.value[newDocPath].saved;
 		// set old context
 		if (activePath.value !== undefined) {
@@ -48,7 +78,7 @@ function updateDocument(newDocPath) {
 
 		activePath.value = newDocPath;
 		mirrorView.value.dispatch({
-            changes: { from: 0, to: mirrorView.value.state.doc.length, insert: context.value[newDocPath].content },
+			changes: { from: 0, to: mirrorView.value.state.doc.length, insert: context.value[newDocPath].content },
         });
 		context.value[newDocPath].saved = saved
     }
@@ -60,7 +90,7 @@ function setUnsaved() {
 
 async function saveFile() {
 	try {
-		const response = await myAxios.post(activePath.value.replace(/\.md$/, ''), mirrorView.value.state.doc.toString());
+		const response = await myAxios.post(activePath.value, mirrorView.value.state.doc.toString());
 		context.value[activePath.value].saved = '✔'
 
 	} catch (error) {
@@ -108,7 +138,7 @@ onMounted(async () => {
         });
     }
 	const response = await myAxios.get('ronly/files')
-	files_json.value = response.data;
+	filesJson.value = response.data;
 
 	watch(() => tokenstore.token, (newValue) => {
     if (newValue !== '') {
@@ -131,7 +161,7 @@ onMounted(async () => {
 	</div>
 <div class="border-green-500 border-2 flex flex-grow bg-black">
 	<div class="w-1/4 border-blue-500 border-2 ">
-		<LegendDirectory :dir="files_json" @openFile="setActiveEditor" />
+		<LegendDirectory :dir="filesJson" :selected="selectedPath" @openFile="setActiveEditor" @selectedPath="setSelectedPath" @createFile="createFile" @deleteFile="deleteFile" />
 	</div>
 	<div class="w-3/4 border-red-500 border-2 flex-grow">
 		<div class="h-8 border-white border-1 flex-grow flex">
@@ -143,7 +173,7 @@ onMounted(async () => {
 				</button>
 				<button v-else
 					@click="updateDocument(identifier)"
-					class="text-white px-4 barder-white border-1 h-full cursor-pointer">
+					class="text-white px-4 border-white border-1 h-full cursor-pointer">
 					{{item.name}} {{item.saved}}
 				</button>
 

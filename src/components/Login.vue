@@ -29,7 +29,9 @@
 			<input v-model="username" placeholder="username" class="placeholder-green-100"/>
 		</div>
 		<div class="p-1 rounded-lg border-2 border-green-100 bg-slate-600">
-			<input type="password" v-model="password" placeholder="password" class="placeholder-green-100"/>
+			<input
+			@keyup.enter="handleLogin"
+			type="password" v-model="password" placeholder="password" class="placeholder-green-100"/>
 		</div>
 		<div><button class="rounded-lg bg-green-400 p-3" @click="handleLogin">Login</button></div>
 

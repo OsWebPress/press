@@ -23,7 +23,7 @@ watch(route, async (newRoute) => {
 
 async function getDocument(route: string): Promise<string> {
 	try {
-		const response = await myAxios.get("carbon" + route);
+		const response = await myAxios.get("carbon" + route + ".md");
 		return response.data;
 	} catch (error) {
 		if (route !== '/404') {
