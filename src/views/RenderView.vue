@@ -2,7 +2,7 @@
 import { ref, onBeforeMount, watch } from 'vue';
 import { myAxios } from '@/axios.ts';
 import { useRoute } from 'vue-router';
-import Rendering from '@/components/Rendering.vue'
+import Rendering from '@/components/render/Rendering.vue'
 import LoadNav from '@/components/LoadNav.vue'
 
 const route = useRoute();

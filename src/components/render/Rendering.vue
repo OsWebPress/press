@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { parsePressBlocks, pressBlockType } from '@/library/pressParser';
-import Markdown from '@/components/Markdown.vue'
-import LoadComponent from '@/components/LoadComponent.vue'
+import Markdown from '@/components/render/Markdown.vue'
+import LoadComponent from '@/components/render/LoadComponent.vue'
 
 const props = defineProps({
   document: String,

@@ -12,7 +12,6 @@ const handleDrop = async (event) => {
 	files.forEach(file => {
 			formData.append('image', file)
 	})
-	// console.log(formData)
 
 	try {
 		const response = await myAxios.post('images/upload', formData, {

@@ -1,21 +1,20 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { jwtDecode } from 'jwt-decode';
 import Login from '@/components/Login.vue';
-import UserList from '@/components/Userlist.vue';
+import UserList from '@/components/admin/UserList.vue';
 import LoadNav from '@/components/LoadNav.vue';
-import { useTokenStore } from '@/stores/token';
+import { useUserStore } from '@/stores/user';
+import navData from '@/assets/adminNavigation.json'
 
 const view = ref('login');
-const tokenstore = useTokenStore();
+const store = useUserStore();
 const role = ref(null);
 
 onMounted(() => {
-  watch(() => tokenstore.token, (newValue) => {
-    if (newValue !== '') {
+  watch(() => store.user, (newValue) => {
+    if (newValue !== "") {
       view.value = 'authenticated';
-      const decodedToken = jwtDecode(newValue);
-      role.value = decodedToken.role || null;
+      role.value = newValue;
     } else {
       view.value = 'login';
     }
@@ -26,7 +25,7 @@ onMounted(() => {
 <template>
 	<header>
 		<div class="w-full z-50">
-			<LoadNav />
+			<LoadNav :navData />
 		</div>
 	</header>
 

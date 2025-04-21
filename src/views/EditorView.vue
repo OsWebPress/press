@@ -6,16 +6,16 @@ import { EditorState } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { markdown } from '@codemirror/lang-markdown';
 import { myAxios } from '@/axios.ts'
-import LegendDirectory from '@/components/LegendDirectory.vue'
+import LegendDirectory from '@/components/editor/LegendDirectory.vue'
 import LoadNav from '@/components/LoadNav.vue'
 import navData from '@/assets/adminNavigation.json'
-import { useTokenStore } from '@/stores/token';
+import { useUserStore } from '@/stores/user';
 import Login from '@/components/Login.vue';
 
-const tokenstore = useTokenStore();
+const store = useUserStore();
 const codemirrorRef = ref(null);
 const mirrorView = ref(null)
-const filesJson = ref([]);
+const filesJson = ref({});
 const activePath = ref(undefined)
 const context = ref({});
 const login = ref(false)
@@ -51,7 +51,6 @@ function setSelectedPath(doc) {
 
 // funciton can be optimized by first creating the context in the frontend and then adding the file to the backend.
 async function createFile(path) {
-	console.log(path)
 	try {
 		await myAxios.post(path, "");
 		const response = await myAxios.get('ronly/files')
@@ -139,9 +138,10 @@ onMounted(async () => {
     }
 	const response = await myAxios.get('ronly/files')
 	filesJson.value = response.data;
+	filesJson.value.children = response.data.children.filter(child => child.name !== "images");
 
-	watch(() => tokenstore.token, (newValue) => {
-    if (newValue !== '') {
+	watch(() => store.user, (newValue) => {
+    if (newValue !== "") {
       login.value = false
     //   const decodedToken = jwtDecode(newValue);
     //   role.value = decodedToken.role || null;

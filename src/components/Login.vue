@@ -1,25 +1,42 @@
-<script lang="ts">
-	import { useTokenStore } from '@/stores/token'
-	import {myAxios} from '@/axios.ts'
-	export default {
-		data() {
-		return {
-			username: "",
-			password: "",
-		};
-		},
-		methods: {
-		async handleLogin() {
-			const response = await myAxios.post('/login',
-				{username: this.username, password: this.password},
-				{headers: { 'Content-Type': 'application/json' },
-				responseType: 'text',}
-				);
-			const store = useTokenStore();
-			store.token = response.data;
-		},
-		},
-	};
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '@/stores/user';
+import { myAxios } from '@/axios.ts';
+
+const username = ref('');
+const password = ref('');
+const store = useUserStore();
+
+const handleLogin = async () => {
+    try {
+        const response = await myAxios.post('/login',
+            { username: username.value, password: password.value },
+            {
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+        store.user = response.data.role;
+    } catch (error) {
+        console.error("Login failed:", error);
+        //  Handle error (e.g., show message to user)
+    }
+};
+
+onMounted(async () => {
+    try {
+        const response = await myAxios.post('/login',
+            { username: username.value, password: password.value },
+            {
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
+        store.user = response.data.role;
+    } catch (error) {
+        console.error("Login failed:", error);
+        //  Handle error (e.g., show message to user)
+    }
+})
+
 </script>
 
 <template>

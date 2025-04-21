@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { myAxios } from '@/axios.ts'
 	import { ref, onMounted } from 'vue'
-	import EditableUserCard from '@/components/EditableUserCard.vue'
-	import NewUserCard from '@/components/NewUserCard.vue'
+	import EditableUserCard from '@/components/admin/EditableUserCard.vue'
+	import NewUserCard from '@/components/admin/NewUserCard.vue'
 	export default {
 		components: {
 			EditableUserCard,
@@ -14,12 +14,10 @@
 			const getUsers = async () => {
 				try {
 					const response = await myAxios.get('/admin/users');
-					console.log(response);
 					userlist.value = response.data; // This correctly updates the reactive ref
 				} catch (error) {
 					console.error("Error fetching users:", error);
 				}
-				console.log('getUsers called')
 			}
 
 			onMounted(async () => {

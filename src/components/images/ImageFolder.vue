@@ -1,7 +1,6 @@
 <script setup>
 
 function emitDirChange() {
-	console.log()
 }
 
 </script>
