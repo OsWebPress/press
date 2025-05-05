@@ -53,8 +53,7 @@ function setSelectedPath(doc) {
 async function createFile(path) {
 	try {
 		await myAxios.post(path, "");
-		const response = await myAxios.get('ronly/files')
-		filesJson.value = response.data;
+		setFilesJson();
 		setActiveEditor({path: path, name: path.split("/").pop()})
 	} catch (error) {
 		console.error("error posting the document", error);
@@ -63,8 +62,7 @@ async function createFile(path) {
 
 async function deleteFile(path) {
 	// delete context.value[path] // do we want to get rid of the context right away?
-	const response = await myAxios.get('ronly/files')
-	filesJson.value = response.data;
+	setFilesJson()
 }
 
 function updateDocument(newDocPath) {
@@ -93,10 +91,18 @@ async function saveFile() {
 		context.value[activePath.value].saved = '✔'
 
 	} catch (error) {
+		login.value = false
 		console.error("error posting the document", error);
 		// add prompt to login here.
 		// can be achieved with the login widget as overlay.
 	}
+}
+
+async function setFilesJson() {
+	const response = await myAxios.get('ronly/')
+	filesJson.value = response.data;
+	filesJson.value.children = response.data.children.filter(child => child.name !== "images");
+	filesJson.value.children = response.data.children.filter(child => child.name !== ".git");
 }
 
 onMounted(async () => {
@@ -136,15 +142,11 @@ onMounted(async () => {
 			],
         });
     }
-	const response = await myAxios.get('ronly/files')
-	filesJson.value = response.data;
-	filesJson.value.children = response.data.children.filter(child => child.name !== "images");
+	setFilesJson()
 
 	watch(() => store.user, (newValue) => {
     if (newValue !== "") {
       login.value = false
-    //   const decodedToken = jwtDecode(newValue);
-    //   role.value = decodedToken.role || null;
     } else {
       login.value = true;
     }
@@ -153,6 +155,7 @@ onMounted(async () => {
 </script>
 
 <template>
+<title>Editor</title>
 <Login class="absolute top-1/4 left-1/6" v-if="login"/>
 
 <div class="h-screen flex flex-col">
@@ -178,7 +181,6 @@ onMounted(async () => {
 				</button>
 
 			</div>
-			<!-- add the tabs here -->
 		</div>
 		<div ref="codemirrorRef" class="top-0 left-0 w-full h-auto overflow-y-auto"></div>
 	</div>

@@ -26,6 +26,7 @@ onMounted(async () => {
 <!-- Use an infinite grid to display the files and dirs in images. -->
 <!-- Add a space on top to add a file. -->
 <template>
+	<title>Image Galery</title>
 <div class="h-screen flex flex-col">
 	<div class="w-full z-50">
 		<LoadNav :navData />

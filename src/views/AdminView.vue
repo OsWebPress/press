@@ -23,6 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
+	<title>Admin Control</title>
 	<header>
 		<div class="w-full z-50">
 			<LoadNav :navData />

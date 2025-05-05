@@ -5,6 +5,8 @@ import { useRoute } from 'vue-router';
 import Rendering from '@/components/render/Rendering.vue'
 import LoadNav from '@/components/LoadNav.vue'
 
+const TITLE = import.meta.env.VITE_TITLE;
+
 const route = useRoute();
 const document = ref("");
 const loading = ref(true);
@@ -39,6 +41,7 @@ async function getDocument(route: string): Promise<string> {
 
 <template>
 	<header>
+		<title> {{ TITLE }} </title>
 		<div class="fixed w-full z-50">
 			<LoadNav />
 		</div>

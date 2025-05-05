@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 const API_URL = import.meta.env.VITE_API_URL;
 
 const emit = defineEmits();
+const mdImage = ref('');
 
 const props = defineProps({
 	imageUrl: String
@@ -15,7 +16,8 @@ function exit(event) {
 }
 
 function copyMD(event) {
-	navigator.clipboard.writeText(`![alt text](${props.imageUrl})`)
+	navigator.clipboard.writeText(mdImage.value)
+	// navigator.clipboard.writeText(`![alt text](${props.imageUrl})`)
 	animate_ping(event)
 }
 
@@ -28,6 +30,10 @@ function animate_ping(event) {
       btn.classList.remove('animate-ping');
     }, 1000);
 }
+
+onMounted(() => {
+	mdImage.value = `![alt text](${props.imageUrl.replace(/ /g, '%20')})`;
+})
 
 </script>
 
