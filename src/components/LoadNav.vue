@@ -2,8 +2,7 @@
 import { ref } from 'vue'
 import { onMounted, shallowRef } from 'vue'
 import { loadComponent } from 'vue3-external-component'
-import { myAxios } from '@/axios.ts'
-const API_URL = import.meta.env.VITE_API_URL;
+import { myAxios, API_URL } from '@/axios.ts'
 
 const importedComponent = shallowRef(null)
 const navigationData = ref([])

@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import ImagePopOut from '@/components/images/ImagePopOut.vue'
-const API_URL = import.meta.env.VITE_API_URL;
 
 // upload dropped or uploaded images to the backend.
 const popOut = ref(false)
@@ -16,7 +15,7 @@ function imagePopOut() {
 }
 
 onMounted(() => {
-	imageUrl.value = `${API_URL}/${props.imageUrl}`
+	imageUrl.value = `/api/${props.imageUrl}`
 })
 
 </script>

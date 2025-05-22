@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-const API_URL = import.meta.env.VITE_API_URL;
 
 const emit = defineEmits();
 const mdImage = ref('');

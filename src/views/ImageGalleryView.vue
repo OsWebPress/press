@@ -6,7 +6,6 @@ import navData from '@/assets/adminNavigation.json'
 import Image from '@/components/images/Image.vue'
 import ImageUpload from '@/components/images/ImageUpload.vue'
 import ImageFolder from '@/components/images/ImageFolder.vue'
-const API_URL = import.meta.env.VITE_API_URL;
 
 const filesJson = ref({})
 
@@ -18,6 +17,7 @@ async function handleUploaded() {
 onMounted(async () => {
 	const response = await myAxios.get('ronly/images')
 	filesJson.value = response.data;
+	console.log(filesJson.value);
 })
 
 </script>
@@ -32,7 +32,6 @@ onMounted(async () => {
 		<LoadNav :navData />
 	</div>
 
-	<img class="absolute inset-0 w-full h-full object-cover z-0" src="http://localhost:8080/images/black-and-white.avif">
 	<div class="grid grid-cols-6 gap-4 z-1 h-48 m-8">
 		<!-- grid-cols-4 = 4 cells on the x-axis -->
 		<!-- This will grow vertically as you add more items -->

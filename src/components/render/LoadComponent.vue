@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, shallowRef } from 'vue'
 import { loadComponent } from 'vue3-external-component'
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from '@/axios';
 
 const importedComponent = shallowRef(null)
 

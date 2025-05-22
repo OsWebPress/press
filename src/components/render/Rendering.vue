@@ -25,7 +25,7 @@ onMounted(() => {
 
 <template>
 
-<div class="absolute top-1/16 left-1/16">
+<div class="absolute top-1/16 left-1/16 w-7/8">
   <div v-for="(block, index) in parsedData" :key="index">
 	<LoadComponent v-if="block.type === pressBlockType.COMPONENT" :component='block.name'><span v-html="block.slot"></span></LoadComponent>
 

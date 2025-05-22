@@ -4,8 +4,9 @@ import { myAxios } from '@/axios.ts';
 import { useRoute } from 'vue-router';
 import Rendering from '@/components/render/Rendering.vue'
 import LoadNav from '@/components/LoadNav.vue'
+import config from '@/assets/config.json'
 
-const TITLE = import.meta.env.VITE_TITLE;
+const TITLE = config.title;
 
 const route = useRoute();
 const document = ref("");

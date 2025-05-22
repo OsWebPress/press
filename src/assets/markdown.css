@@ -49,4 +49,7 @@
 	code {
 	  @apply bg-gray-200 rounded px-1 py-0.5 text-red-600 text-sm;
 	}
+	img {
+		@apply size-auto max-h-[80vh];
+	}
   }
