@@ -16,6 +16,7 @@ onBeforeMount(async () => {
 	document.value = await getDocument(route.fullPath);
 	loading.value = false;
 
+
 })
 
 watch(route, async (newRoute) => {
@@ -42,7 +43,7 @@ async function getDocument(route: string): Promise<string> {
 
 <template>
 	<header>
-		<title> {{ TITLE }} </title>
+		<!-- <title> {{ TITLE }} </title> -->
 		<div class="fixed w-full z-50">
 			<LoadNav />
 		</div>
