@@ -35,7 +35,6 @@ const parsedContent = computed<MatchResult[]>(() => {
     <div
       v-for="(token, index) in parsedContent"
       :key="index"
-      class="font-mono text-blue-600"
     >
       <LoadComponent :component="token.tag" :body="token.body">
 		{{ token.body }}</LoadComponent>

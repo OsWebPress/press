@@ -26,7 +26,7 @@ class PrefixMatcher {
     if (gapText.length > 0) {
       results.push({
         index: start,
-        tag: 'text',
+        tag: 'makedown/text', // tricky to have this dir hardcode here
         match: '',
         body: gapText,
 		size: gapText.length,

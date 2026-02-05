@@ -1,11 +1,13 @@
 import TokenRegistry from '@/library/TokenRegistry';
 
+const dir = "makedown/";
+
 // Helper: Extracts everything after the match until the specified size
 const getBodyAfterMatch = (str: string, match: string, size: number): string => {
   return str.substring(match.length, size).trim();
 };
 
-// Helper: Finds the end of the current line
+// Helper: Finds the end of the current line (Reverted to your original)
 const getEndOfLine = (str: string): number => {
   const nextNewline = str.indexOf('\n');
   return nextNewline;
@@ -20,34 +22,34 @@ const lineRule = {
 };
 
 // Register Headers
-registry.add("# ",     { tag: "h1", ...lineRule });
-registry.add("## ",    { tag: "h2", ...lineRule });
-registry.add("### ",   { tag: "h3", ...lineRule });
-registry.add("#### ",  { tag: "h4", ...lineRule });
-registry.add("##### ", { tag: "h5", ...lineRule });
-registry.add("###### ", { tag: "h6", ...lineRule });
+registry.add("# ",     { tag: `${dir}h1`, ...lineRule });
+registry.add("## ",    { tag: `${dir}h2`, ...lineRule });
+registry.add("### ",   { tag: `${dir}h3`, ...lineRule });
+registry.add("#### ",  { tag: `${dir}h4`, ...lineRule });
+registry.add("##### ", { tag: `${dir}h5`, ...lineRule });
+registry.add("###### ", { tag: `${dir}h6`, ...lineRule });
 
 // Register Lists & Formatting
-registry.add(/[-*+] /,       { tag: "unordered_list", ...lineRule });
-registry.add(/\d+\. /,       { tag: "ordered_list", ...lineRule });
-registry.add("> ",           { tag: "blockquote", ...lineRule });
-registry.add(/(?: - )?\[[ xX]\]/, { tag: "checkbox", ...lineRule });
+registry.add(/[-*+] /,       { tag: `${dir}unordered_list`, ...lineRule });
+registry.add(/\d+\. /,       { tag: `${dir}ordered_list`, ...lineRule });
+registry.add("> ",           { tag: `${dir}blockquote`, ...lineRule });
+registry.add(/(?: - )?\[[ xX]\]/, { tag: `${dir}checkbox`, ...lineRule });
 
 // Dividers
 registry.add("---", {
-  tag: "horizontal_rule",
+  tag: `${dir}horizontal_rule`,
   findEnd: (str) => getEndOfLine(str),
   findBody: () => ""
 });
 registry.add("***", {
-  tag: "horizontal_rule",
+  tag: `${dir}horizontal_rule`,
   findEnd: (str) => getEndOfLine(str),
   findBody: () => ""
 });
 
 // 2. Code Blocks
 registry.add("```", {
-  tag: "code_block",
+  tag: `${dir}code_block`,
   findEnd: (str: string) => {
     const closeIndex = str.indexOf("```", 3);
     return closeIndex !== -1 ? closeIndex + 3 : str.length;
@@ -59,7 +61,7 @@ registry.add("```", {
 
 // 3. Vue Components
 registry.add(/<[A-Z][^\s>]*[^>]*\/>/, {
-  tag: "vue_custom_self_closing",
+  tag: `${dir}vue_custom_self_closing`,
   findEnd: (str, match) => match.length,
   findBody: () => "",
   overwriteTag: (str: string) => {
@@ -69,7 +71,7 @@ registry.add(/<[A-Z][^\s>]*[^>]*\/>/, {
 });
 
 registry.add(/<[A-Z][^\s>]*[^>]*[^/]>/, {
-  tag: "vue_custom_open",
+  tag: `${dir}vue_custom_open`,
   findEnd: (str: string, match: string) => {
     const tagMatch = match.match(/<([A-Z][^\s>]*)/);
     if (!tagMatch) return match.length;
@@ -87,7 +89,7 @@ registry.add(/<[A-Z][^\s>]*[^>]*[^/]>/, {
   },
   overwriteTag: (str: string) => {
 	const tagMatch = str.match(/<([A-Z][^\s>]*)/);
-	return tagMatch ? tagMatch[1] : "vue_custom_no_matching_tag";
+	return tagMatch ? tagMatch[1] : "vue_custom_no_matching_tag"; // don't use dir as prefix so your unique components do not have to be under makedown
   }
 });
 
