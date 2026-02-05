@@ -1,0 +1,44 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import PrefixMatcher from '@/library/PrefixMatcher';
+import makedownRegistry from '@/library/makedown';
+import LoadComponent from './LoadComponent.vue';
+
+// Define the shape of our MatchResult for TypeScript clarity
+interface MatchResult {
+  tag: string;
+  // ... other properties
+}
+
+// Define props
+const props = defineProps({
+  content: {
+    type: String,
+    default: ''
+  },
+  backendUrl: {
+	type: String,
+	default: 'http://localhost:8000/parse'
+  }
+});
+
+const matcher = new PrefixMatcher(makedownRegistry);
+
+// Computed property handles the reactivity
+const parsedContent = computed<MatchResult[]>(() => {
+  return matcher.scanString(props.content);
+});
+</script>
+
+<template>
+  <div class="flex flex-col gap-1 border-2 border-dashed p-4 border-gray-400 rounded">
+    <div
+      v-for="(token, index) in parsedContent"
+      :key="index"
+      class="font-mono text-blue-600"
+    >
+      <LoadComponent :component="token.tag" :body="token.body">
+		{{ token.body }}</LoadComponent>
+    </div>
+  </div>
+</template>
