@@ -15,10 +15,6 @@ const props = defineProps({
   content: {
     type: String,
     default: ''
-  },
-  backendUrl: {
-	type: String,
-	default: 'http://localhost:8000/parse'
   }
 });
 
@@ -36,7 +32,7 @@ const parsedContent = computed<MatchResult[]>(() => {
       v-for="(token, index) in parsedContent"
       :key="index"
     >
-      <LoadComponent :component="token.tag" :body="token.body">
+      <LoadComponent :_component="token.tag" v-bind="token.props">
 		{{ token.body }}</LoadComponent>
     </div>
   </div>

@@ -1,27 +1,26 @@
 <script setup>
 import { onMounted, shallowRef } from 'vue'
-import { loadComponent } from 'vue3-external-component'
+import { useComponentsStore } from '@/stores/components';
 import { API_URL } from '@/axios';
 
 const importedComponent = shallowRef(null)
-
-
+const componentsStore = useComponentsStore();
 
 onMounted(() => {
-	importedComponent.value = loadComponent(`${API_URL}/component/${props.component}.vue`);
+	componentsStore.getComponent(`${API_URL}/component/${props._component}.vue`).then(component => {
+		importedComponent.value = component;
+	})
 })
 
 const props = defineProps({
-  component: {
+  _component: {
     type: String,
     required: true
-  }
+  },
 });
 
 </script>
 
 <template>
-	<div>
-		<component :is=importedComponent><slot></slot></component>
-	</div>
+	<component :is=importedComponent v-bind="$attrs"><slot></slot></component>
 </template>

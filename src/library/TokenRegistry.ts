@@ -3,6 +3,7 @@ interface TokenMetadata {
 	findEnd: (str: string, match: string) => number;
 	findBody: (str: string, size: number, match: string) => string;
 	overwriteTag?: (str: string) => string;
+	propProcessing?: (str: string) => any;
 }
 
 interface Rule extends TokenMetadata {

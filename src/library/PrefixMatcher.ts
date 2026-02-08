@@ -7,6 +7,7 @@ class MatchResult {
   match: string;
   body: string | null;
   size: number;
+  props?: any;
 }
 
 class PrefixMatcher {
@@ -26,7 +27,7 @@ class PrefixMatcher {
     if (gapText.length > 0) {
       results.push({
         index: start,
-        tag: 'makedown/text', // tricky to have this dir hardcode here
+        tag: 'makedown/text', // tricky to have this dir hardcode here, we should maybe get the values from an item in the tokenRegistry instead of hardcoding it here
         match: '',
         body: gapText,
 		size: gapText.length,
@@ -74,6 +75,7 @@ class PrefixMatcher {
         match: match[0],
         body: body,
         size: size,
+        props: rule.propProcessing ? rule.propProcessing(match[0]) : undefined
       };
 	  if (rule.overwriteTag) {
 		object.tag = rule.overwriteTag(match[0]);

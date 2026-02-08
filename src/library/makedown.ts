@@ -21,6 +21,11 @@ const lineRule = {
   findBody: (str: string, size: number, match: string) => getBodyAfterMatch(str, match, size)
 };
 
+const selfClosingRule = {
+  findEnd: (str: string, match: string) => match.length,
+  findBody: (str, match) => match
+};
+
 // Register Headers
 registry.add("# ",     { tag: `${dir}h1`, ...lineRule });
 registry.add("## ",    { tag: `${dir}h2`, ...lineRule });
@@ -59,9 +64,33 @@ registry.add("```", {
   }
 });
 
+registry.add(/<!--.*?-->/, {
+  tag: `${dir}comment`,
+  findEnd: (str, match) => match.length,
+  findBody: (str, size, match) => match.substring(4, size - 3)
+});
+
+registry.add(/!\[.*?\]\([^)]+\)/, {
+  tag: `${dir}image`,
+  propProcessing: (str: string) => {
+	const altMatch = str.match(/!\[(.*?)\]/);
+	const urlMatch = str.match(/\(([^)]+)\)/);
+	return {
+		alt: altMatch ? altMatch[1] : "",
+		url: urlMatch ? urlMatch[1] : ""
+	};
+  },
+  ...selfClosingRule
+});
+
+registry.add(/\[.*?\]\([^)]+\)/, {
+  tag: `${dir}link`,
+  ...selfClosingRule
+});
+
 // 3. Vue Components
 registry.add(/<[A-Z][^\s>]*[^>]*\/>/, {
-  tag: `${dir}vue_custom_self_closing`,
+  tag: `vue_custom_self_closing`,
   findEnd: (str, match) => match.length,
   findBody: () => "",
   overwriteTag: (str: string) => {
@@ -71,7 +100,7 @@ registry.add(/<[A-Z][^\s>]*[^>]*\/>/, {
 });
 
 registry.add(/<[A-Z][^\s>]*[^>]*[^/]>/, {
-  tag: `${dir}vue_custom_open`,
+  tag: `vue_custom_open`,
   findEnd: (str: string, match: string) => {
     const tagMatch = match.match(/<([A-Z][^\s>]*)/);
     if (!tagMatch) return match.length;
