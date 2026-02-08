@@ -35,26 +35,35 @@ registry.add("##### ", { tag: `${dir}h5`, ...lineRule });
 registry.add("###### ", { tag: `${dir}h6`, ...lineRule });
 
 // Register Lists & Formatting
-registry.add(/[-*+] /,       { tag: `${dir}unordered_list`, ...lineRule });
-registry.add(/\d+\. /,       { tag: `${dir}ordered_list`, ...lineRule });
+registry.add(/ ?(?:- )?\[[ xX]\]/, {
+	tag: `${dir}checkbox`,
+	propProcessing: (str: string) => {
+		const checked = str.toLowerCase().includes("[x]");
+		const label = str.replace(/(?: - )?\[[ xX]\]/, '').trim();
+		return { checked, label };
+	},
+	 ...lineRule
+	}
+);
+registry.add(/ ?[-*+] /, { tag: `${dir}unorderedListItem`, ...lineRule });
+registry.add(/\d+\. /,       { tag: `${dir}orderedListItem`, ...lineRule });
 registry.add("> ",           { tag: `${dir}blockquote`, ...lineRule });
-registry.add(/(?: - )?\[[ xX]\]/, { tag: `${dir}checkbox`, ...lineRule });
 
 // Dividers
 registry.add("---", {
-  tag: `${dir}horizontal_rule`,
+  tag: `${dir}horizontalRule`,
   findEnd: (str) => getEndOfLine(str),
   findBody: () => ""
 });
 registry.add("***", {
-  tag: `${dir}horizontal_rule`,
+  tag: `${dir}horizontalRule`,
   findEnd: (str) => getEndOfLine(str),
   findBody: () => ""
 });
 
 // 2. Code Blocks
 registry.add("```", {
-  tag: `${dir}code_block`,
+  tag: `${dir}codeBlock`,
   findEnd: (str: string) => {
     const closeIndex = str.indexOf("```", 3);
     return closeIndex !== -1 ? closeIndex + 3 : str.length;
@@ -85,6 +94,14 @@ registry.add(/!\[.*?\]\([^)]+\)/, {
 
 registry.add(/\[.*?\]\([^)]+\)/, {
   tag: `${dir}link`,
+    propProcessing: (str: string) => {
+	const textMatch = str.match(/\[(.*?)\]/);
+	const urlMatch = str.match(/\(([^)]+)\)/);
+	return {
+		text: textMatch ? textMatch[1] : "",
+		url: urlMatch ? urlMatch[1] : ""
+	};
+  },
   ...selfClosingRule
 });
 

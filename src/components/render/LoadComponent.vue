@@ -22,5 +22,5 @@ const props = defineProps({
 </script>
 
 <template>
-	<component :is=importedComponent v-bind="$attrs"><slot></slot></component>
+	<component :is=importedComponent v-bind="$attrs"><slot /></component>
 </template>
