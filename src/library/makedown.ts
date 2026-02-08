@@ -113,7 +113,19 @@ registry.add(/<[A-Z][^\s>]*[^>]*\/>/, {
   overwriteTag: (str: string) => {
 	const tagMatch = str.match(/<([A-Z][^\s>]*)/);
 	return tagMatch ? tagMatch[1] : "vue_custom_no_matching_tag";
-  }
+  },
+  propProcessing: (str: string) => {
+	const attrs = {};
+	const regex = /(\w+)="([^"]*)"/g;
+	let match;
+
+	while ((match = regex.exec(str)) !== null) {
+		console.log(`Found attribute: ${match[1]}="${match[2]}"`);
+	attrs[match[1]] = match[2];
+	}
+
+	return attrs;
+	}
 });
 
 registry.add(/<[A-Z][^\s>]*[^>]*[^/]>/, {

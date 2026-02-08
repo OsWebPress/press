@@ -23,8 +23,6 @@ class PrefixMatcher {
     if (end <= start) return;
 
     const gapText = content.substring(start, end);
-	console.log(`Pushing gap-text: "${gapText}"`);
-
     if (gapText.length > 0) {
       results.push({
         index: start,
