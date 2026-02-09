@@ -46,7 +46,10 @@ registry.add(/ ?(?:- )?\[[ xX]\]/, {
 	}
 );
 registry.add(/ ?[-*+] /, { tag: `${dir}unorderedListItem`, ...lineRule });
-registry.add(/\d+\. /,       { tag: `${dir}orderedListItem`, ...lineRule });
+registry.add(/\d+\. /,       { tag: `${dir}orderedListItem`, ...lineRule, propProcessing: (str: string) => {
+	const numberMatch = str.match(/^(\d+)\. /);
+	return {number: numberMatch ? parseInt(numberMatch[1], 10) : 1};
+}});
 registry.add("> ",           { tag: `${dir}blockquote`, ...lineRule });
 
 // Dividers

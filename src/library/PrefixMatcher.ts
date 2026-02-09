@@ -30,6 +30,7 @@ class PrefixMatcher {
         match: '',
         body: gapText,
 		size: gapText.length,
+		props: { body: gapText }
       });
     }
   }
