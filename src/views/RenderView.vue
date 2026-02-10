@@ -48,7 +48,7 @@ async function getDocument(route: string): Promise<string> {
 	</header>
 	<main>
 		<div v-if="loading">loading..</div>
-		<Makedown v-else :content="document" class="ml-24 pt-8 mr-8 max-w-4xl" />
+		<Makedown v-else :content="document" class="pl-24 pt-8 pr-8 max-w-4xl" />
 	</main>
 </div>
 </template>
