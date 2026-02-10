@@ -36,6 +36,6 @@ router.afterEach((to) => {
   } else {
 	document.title = to.name as string;
   }
-})
+}})
 
 export default router

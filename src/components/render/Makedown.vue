@@ -27,7 +27,7 @@ const parsedContent = computed<MatchResult[]>(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-1 border-2 border-dashed p-4 border-gray-400 rounded">
+  <div>
     <LoadComponent
       v-for="(token, index) in parsedContent"
       :key="index"

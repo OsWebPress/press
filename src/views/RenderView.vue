@@ -2,9 +2,9 @@
 import { ref, onBeforeMount, watch } from 'vue';
 import { myAxios } from '@/axios.ts';
 import { useRoute } from 'vue-router';
-import Rendering from '@/components/render/Rendering.vue'
 import LoadNav from '@/components/LoadNav.vue'
 import config from '@/assets/config.json'
+import Makedown from '@/components/render/Makedown.vue';
 
 const TITLE = config.title;
 
@@ -42,16 +42,13 @@ async function getDocument(route: string): Promise<string> {
 </script>
 
 <template>
-	<header>
-		<!-- <title> {{ TITLE }} </title> -->
-		<div class="fixed w-full z-50">
-			<LoadNav />
-		</div>
+<div class="grid grid-rows-[auto_1fr] min-h-screen">
+	<header class="sticky top-0 z-50">
+		<LoadNav />
 	</header>
-  <main>
-
-	<div v-if="loading">loading..</div>
-	<Rendering v-else :document="document"/>
-
-  </main>
+	<main>
+		<div v-if="loading">loading..</div>
+		<Makedown v-else :content="document" class="ml-24 pt-8 mr-8 max-w-4xl" />
+	</main>
+</div>
 </template>
