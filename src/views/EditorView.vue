@@ -191,13 +191,14 @@ async function getBackground() {
 	<div class="w-full z-50">
 		<LoadNav :navData />
 	</div>
-	<div class="border-green-500 border-2 flex flex-grow bg-black">
-		<div class="w-1/4 border-blue-500 border-2 ">
+	<div class="border-green-500 border-2 flex flex-grow bg-black min-h-0 overflow-y-auto">
+		<div class="w-1/4 border-blue-500 border-2 h-full overflow-y-auto">
 			<LegendDirectory :dir="filesJson" :selected="selectedPath" @openFile="setActiveEditor" @selectedPath="setSelectedPath" @createFile="createFile" @deleteFile="deleteFile" />
 		</div>
 		<div class="w-full flex flex-col xl:flex-row flex-grow">
-			<div class="w-full h-full xl:w-1/2 border-red-500 border-2 flex-grow max-h-1/2 xl:max-h-full order-2 xl:order-1 min-h-0">
-				<div class="h-8 border-white border-1 flex-grow flex">
+			<div class="w-full xl:w-5/8 border-red-500 border-2 flex flex-col order-2 xl:order-1 min-h-0 h-5/8 xl:h-full max-h-full"
+						:class="preview ? 'max-h-1/2' : 'flex-grow'">
+				<div class="h-8 border-white border-1 flex flex-shrink-0">
 					<div class="flex-none" v-for="(item, identifier) in context">
 						<button v-if="identifier === activePath"
 							@click="saveFile"
