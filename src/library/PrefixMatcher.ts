@@ -75,7 +75,10 @@ class PrefixMatcher {
         match: match[0],
         body: body,
         size: size,
-        props: rule.propProcessing ? rule.propProcessing(match[0]) : undefined
+        props: {
+			body: body,
+			...(rule.propProcessing ? rule.propProcessing(match[0]) : {})
+		}
       };
 	  if (rule.overwriteTag) {
 		object.tag = rule.overwriteTag(match[0]);

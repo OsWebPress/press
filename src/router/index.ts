@@ -14,6 +14,11 @@ const router = createRouter({
 		name: 'editor',
 		component: () => import('@/views/EditorView.vue'),
     },
+	{
+		path: '/admin/preview',
+		name: 'preview',
+		component: () => import('@/views/AdminPreview.vue'),
+	},
     {
 		path: '/admin/images',
 		name: 'gallery',

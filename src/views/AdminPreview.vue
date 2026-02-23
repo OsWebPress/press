@@ -1,43 +1,32 @@
 <script setup lang="ts">
 import { ref, onBeforeMount, watch } from 'vue';
 import { myAxios } from '@/axios.ts';
-import { useRoute } from 'vue-router';
 import LoadNav from '@/components/LoadNav.vue'
 import config from '@/assets/config.json'
 import Makedown from '@/components/render/Makedown.vue';
 
 const TITLE = config.title;
 
-const route = useRoute();
-const document = ref("");
 const loading = ref(true);
 const background = ref("");
+const content = ref(localStorage.getItem('previewContent') || '')
 
 onBeforeMount(async () => {
 	background.value = await getBackground();
-	document.value = await getDocument(route.fullPath);
 	loading.value = false;
 })
 
-watch(route, async (newRoute) => {
-	loading.value = true;
-	document.value = await getDocument(route.fullPath);
-	loading.value = false;
-});
+// for iframe updates
+window.addEventListener('message', (e) => {
+  content.value = e.data.content
+})
 
-async function getDocument(route: string): Promise<string> {
-	try {
-		const response = await myAxios.get("carbon" + route + ".md");
-		return response.data;
-	} catch (error) {
-		if (route !== '/404') {
-			return await getDocument('/404');
-		} else {
-			console.error("error fetching /404 document", error);
-			return "404 page unavailable";
-		}
-	}
-}
+// for standalone tab updates
+window.addEventListener('storage', (e) => {
+  if (e.key === 'previewContent') {
+    content.value = e.newValue
+  }
+})
 
 async function getBackground(): Promise<string> {
 	try {
@@ -61,7 +50,7 @@ async function getBackground(): Promise<string> {
 	</header>
 	<main>
 		<div v-if="loading">loading..</div>
-		<Makedown v-else :content="document" class="pl-24 pr-8 max-w-4xl" />
+		<Makedown v-else :content="content" class="pl-24 pr-8 max-w-4xl" />
 	</main>
 </div>
 </template>
