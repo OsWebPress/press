@@ -12,7 +12,6 @@ import navData from '@/assets/adminNavigation.json'
 import { useUserStore } from '@/stores/user';
 import Login from '@/components/Login.vue';
 import ShowPreview from '@/components/editor/ShowPreview.vue';
-import { usePreviewStore } from '@/stores/preview';
 
 const store = useUserStore();
 const codemirrorRef = ref(null);
@@ -192,37 +191,33 @@ async function getBackground() {
 	<div class="w-full z-50">
 		<LoadNav :navData />
 	</div>
-<div class="border-green-500 border-2 flex flex-grow bg-black">
-	<div class="w-1/4 border-blue-500 border-2 ">
-		<LegendDirectory :dir="filesJson" :selected="selectedPath" @openFile="setActiveEditor" @selectedPath="setSelectedPath" @createFile="createFile" @deleteFile="deleteFile" />
-	</div>
-	<div class="w-3/4 border-red-500 border-2 flex-grow">
-		<div class="h-8 border-white border-1 flex-grow flex">
-			<div class="flex-none" v-for="(item, identifier) in context">
-				<button v-if="identifier === activePath"
-					@click="saveFile"
-					class="text-white px-4 border-teal-600 border-4 h-full cursor-pointer">
-					{{item.name}} {{item.saved}}
-				</button>
-				<button v-else
-					@click="updateDocument(identifier)"
-					class="text-white px-4 border-white border-1 h-full cursor-pointer">
-					{{item.name}} {{item.saved}}
-				</button>
+	<div class="border-green-500 border-2 flex flex-grow bg-black">
+		<div class="w-1/4 border-blue-500 border-2 ">
+			<LegendDirectory :dir="filesJson" :selected="selectedPath" @openFile="setActiveEditor" @selectedPath="setSelectedPath" @createFile="createFile" @deleteFile="deleteFile" />
+		</div>
+		<div class="w-full flex flex-col xl:flex-row flex-grow">
+			<div class="w-full h-full xl:w-1/2 border-red-500 border-2 flex-grow max-h-1/2 xl:max-h-full order-2 xl:order-1 min-h-0">
+				<div class="h-8 border-white border-1 flex-grow flex">
+					<div class="flex-none" v-for="(item, identifier) in context">
+						<button v-if="identifier === activePath"
+							@click="saveFile"
+							class="text-white px-4 border-teal-600 border-4 h-full cursor-pointer">
+							{{item.name}} {{item.saved}}
+						</button>
+						<button v-else
+							@click="updateDocument(identifier)"
+							class="text-white px-4 border-white border-1 h-full cursor-pointer">
+							{{item.name}} {{item.saved}}
+						</button>
 
+					</div>
+				</div>
+				<div ref="codemirrorRef" class="top-0 left-0 w-full min-h-0 flex-grow overflow-y-auto"></div>
+			</div>
+			<div v-if="preview" class="w-full h-3/8 xl:h-full border-t-2 border-blue relative bg-blue-100 order-1 xl:order-2">
+				<iframe ref="iframeRef" src="/admin/preview" @load="iframeRef.contentWindow.postMessage({ content: liveContent }, '*')" class="w-full h-full border-none"/>
 			</div>
 		</div>
-		<div ref="codemirrorRef" class="top-0 left-0 w-full h-auto overflow-y-auto"></div>
 	</div>
-	<div v-if="preview" class="w-1/2 border-t-2 border-blue relative bg-blue-100">
-		<!-- <Makedown :content="background" class="absolute inset-0 bg-blue-100"/> -->
-		<!-- <Makedown :content="liveContent" class="relative pl-24 pr-8 z-10"/> -->
-		<!-- <Makedown :content="liveContent" class="relative pl-24 pr-8 max-w-4xl z-10 scale-50 origin-top-left -translate-x-0"/> -->
-		<!-- <Makedown :content="liveContent" class="origin-top-left scale-50 w-[200%] h-[200%] pl-24 pr-8"/> -->
-		<!-- <Makedown :content="liveContent" class="origin-top-left pl-24 pr-8 scale-75"/> -->
-		 <iframe ref="iframeRef" src="/admin/preview" @load="iframeRef.contentWindow.postMessage({ content: liveContent }, '*')" class="w-full h-full border-none"/>
-	</div>
-
-</div>
 </div>
 </template>
