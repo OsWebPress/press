@@ -185,7 +185,7 @@ async function getBackground() {
 <template>
 <title>Editor</title>
 <Login class="absolute top-1/4 left-1/6" v-if="login"/>
-<ShowPreview v-if="preview === false" @foldOut="togglePreview" class="z-10"/>
+<ShowPreview @foldOut="togglePreview" class="z-10"/>
 
 <div class="h-screen flex flex-col">
 	<div class="w-full z-50">
