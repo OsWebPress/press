@@ -12,9 +12,11 @@ const route = useRoute();
 const document = ref("");
 const loading = ref(true);
 const background = ref("");
+const footer = ref("");
 
 onBeforeMount(async () => {
-	background.value = await getBackground();
+	background.value = await getSpecific("carbon/background.md");
+	footer.value = await getSpecific("carbon/footer.md");
 	document.value = await getDocument(route.fullPath);
 	loading.value = false;
 })
@@ -39,12 +41,12 @@ async function getDocument(route: string): Promise<string> {
 	}
 }
 
-async function getBackground(): Promise<string> {
+async function getSpecific(path: string): Promise<string> {
 	try {
-		const response = await myAxios.get("carbon/background.md");
+		const response = await myAxios.get(path);
 		return response.data;
 	} catch (error) {
-		console.error("error fetching background document", error);
+		console.error("error fetching specific document", path, error);
 		return "";
 	}
 }
@@ -57,11 +59,12 @@ async function getBackground(): Promise<string> {
 </div>
 <div class="grid grid-rows-[auto_1fr] min-h-screen">
 	<header class="sticky top-0 z-50">
-		<LoadNav />
+		<LoadNav :path="route.fullPath"/>
 	</header>
 	<main>
 		<div v-if="loading">loading..</div>
-		<Makedown v-else :content="document" class="pl-24 pr-8 max-w-4xl" />
+		<Makedown v-else :content="document" class="pl-3rem md:pl-6rem xl:pl-12rem 2xl:pl-18rem pr-8 max-w-4xl 2xl:max-w-6xl" />
+		<Makedown :content="footer" class="pl-3rem md:pl-6rem xl:pl-12rem 2xl:pl-18rem pr-8 max-w-4xl 2xl:max-w-6xl" />
 	</main>
 </div>
 </template>
