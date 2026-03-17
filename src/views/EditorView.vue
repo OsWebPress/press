@@ -192,10 +192,10 @@ async function getBackground() {
 		<LoadNav :navData />
 	</div>
 	<div class="border-green-500 border-2 flex flex-grow bg-black min-h-0 overflow-y-auto">
-		<div class="w-1/4 border-blue-500 border-2 h-full overflow-y-auto">
+		<div class="w-1/4 flex-shrink-0 border-blue-500 border-2 h-full overflow-y-auto">
 			<LegendDirectory :dir="filesJson" :selected="selectedPath" @openFile="setActiveEditor" @selectedPath="setSelectedPath" @createFile="createFile" @deleteFile="deleteFile" />
 		</div>
-		<div class="w-full flex flex-col xl:flex-row flex-grow">
+		<div class="flex flex-col xl:flex-row flex-grow min-w-0">
 			<div class="w-full xl:w-5/8 border-red-500 border-2 flex flex-col order-2 xl:order-1 min-h-0 h-5/8 xl:h-full max-h-full"
 						:class="preview ? 'max-h-1/2' : 'flex-grow'">
 				<div class="h-8 border-white border-1 flex flex-shrink-0">
@@ -213,7 +213,7 @@ async function getBackground() {
 
 					</div>
 				</div>
-				<div ref="codemirrorRef" class="top-0 left-0 w-full min-h-0 flex-grow overflow-y-auto"></div>
+				<div ref="codemirrorRef" class="top-0 left-0 w-full min-h-0 flex-grow overflow-y-auto overflow-x-hidden"></div>
 			</div>
 			<div v-if="preview" class="w-full h-3/8 xl:h-full border-t-2 border-blue relative bg-blue-100 order-1 xl:order-2">
 				<iframe ref="iframeRef" src="/admin/preview" @load="iframeRef.contentWindow.postMessage({ content: liveContent }, '*')" class="w-full h-full border-none"/>
