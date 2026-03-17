@@ -2,9 +2,8 @@
 import { ref, watch, onMounted } from 'vue';
 import Login from '@/components/Login.vue';
 import UserList from '@/components/admin/UserList.vue';
-import LoadNav from '@/components/LoadNav.vue';
+import AdminNav from '@/components/AdminNav.vue';
 import { useUserStore } from '@/stores/user';
-import navData from '@/assets/adminNavigation.json'
 
 const view = ref('login');
 const store = useUserStore();
@@ -26,7 +25,7 @@ onMounted(() => {
 	<title>Admin Control</title>
 	<header>
 		<div class="w-full z-50">
-			<LoadNav :navData />
+			<AdminNav />
 		</div>
 	</header>
 

@@ -6,10 +6,16 @@ const instance = axios.create({
 	// withCredentials: true
 });
 
-// instance.interceptors.request.use(config => {
-// 	  return config;
-// 	}, error => {
-// 	  return Promise.reject(error);
-// });
+import { useUserStore } from './stores/user'
+
+instance.interceptors.response.use(
+	res => res,
+	err => {
+		if (err.response?.status === 401) {
+			useUserStore().user = ''
+		}
+		return Promise.reject(err)
+	}
+)
 
 export const myAxios = instance;

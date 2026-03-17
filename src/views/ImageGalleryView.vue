@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { myAxios } from '@/axios.ts';
-import LoadNav from '@/components/LoadNav.vue'
-import navData from '@/assets/adminNavigation.json'
+import AdminNav from '@/components/AdminNav.vue'
 import Image from '@/components/images/Image.vue'
 import ImageUpload from '@/components/images/ImageUpload.vue'
 import ImageFolder from '@/components/images/ImageFolder.vue'
@@ -29,7 +28,7 @@ onMounted(async () => {
 	<title>Image Galery</title>
 <div class="h-screen flex flex-col">
 	<div class="w-full z-50">
-		<LoadNav :navData />
+		<AdminNav />
 	</div>
 
 	<div class="grid grid-cols-6 gap-4 z-1 h-48 m-8">
