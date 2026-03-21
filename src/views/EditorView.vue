@@ -117,10 +117,7 @@ async function saveFile() {
 		context.value[activePath.value].saved = '✔'
 
 	} catch (error) {
-		login.value = false
 		console.error("error posting the document", error);
-		// add prompt to login here.
-		// can be achieved with the login widget as overlay.
 	}
 }
 

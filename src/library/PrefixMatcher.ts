@@ -16,7 +16,7 @@ class PrefixMatcher {
 
   constructor(registry: TokenRegistry) {
     this.#rules = registry.getSortedRules();
-    this.#regex = new RegExp(`(${registry.getCombinedPattern()})`, 'g');
+    this.#regex = new RegExp(`(${registry.getCombinedPattern()})`, 'gm');
   }
 
   #pushText(results: MatchResult[], content: string, start: number, end: number): void {

@@ -9,7 +9,7 @@ const store = useUserStore();
 
 const handleLogin = async () => {
     try {
-        const response = await myAxios.post('/login',
+        const response = await myAxios.post('login',
             { username: username.value, password: password.value },
             {
                 headers: { 'Content-Type': 'application/json' },
@@ -24,7 +24,7 @@ const handleLogin = async () => {
 
 onMounted(async () => {
     try {
-        const response = await myAxios.post('/login',
+        const response = await myAxios.post('login',
             { username: username.value, password: password.value },
             {
                 headers: { 'Content-Type': 'application/json' },
@@ -40,17 +40,24 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div class="rounded-lg p-2 border-2 border-green-200 bg-black">
+	<div class="rounded-xl bg-zinc-800 border border-zinc-700 p-6 w-80 flex flex-col gap-3">
+		<p class="text-zinc-300 text-sm font-medium mb-1">Admin Login</p>
 
-		<div class="p-1 rounded-lg border-2 border-green-100 bg-slate-600">
-			<input v-model="username" placeholder="username" class="placeholder-green-100"/>
-		</div>
-		<div class="p-1 rounded-lg border-2 border-green-100 bg-slate-600">
-			<input
+		<input
+			v-model="username"
+			placeholder="username"
+			class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors w-full"
+		/>
+		<input
 			@keyup.enter="handleLogin"
-			type="password" v-model="password" placeholder="password" class="placeholder-green-100"/>
-		</div>
-		<div><button class="rounded-lg bg-green-400 p-3" @click="handleLogin">Login</button></div>
-
+			type="password"
+			v-model="password"
+			placeholder="password"
+			class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-zinc-500 transition-colors w-full"
+		/>
+		<button
+			class="rounded-lg bg-zinc-600 hover:bg-zinc-500 text-zinc-100 text-sm px-4 py-2 transition-colors w-full"
+			@click="handleLogin"
+		>Login</button>
 	</div>
 </template>

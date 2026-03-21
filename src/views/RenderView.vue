@@ -54,11 +54,11 @@ async function getSpecific(path: string): Promise<string> {
 </script>
 
 <template>
-<div class="top-0 z--10 bg-blue-100 w-full h-full fixed">
+<div class="top-0 z--10 w-full h-full fixed overflow-hidden pl-3rem md:pl-6rem xl:pl-12rem 2xl:pl-18rem">
 	<Makedown :content="background"/>
 </div>
 <div class="grid grid-rows-[auto_1fr] min-h-screen">
-	<header class="sticky top-0 z-50">
+	<header>
 		<LoadNav :path="route.fullPath"/>
 	</header>
 	<main>

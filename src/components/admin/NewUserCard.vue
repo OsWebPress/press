@@ -1,6 +1,7 @@
 <script setup>
 import { myAxios } from '@/axios.ts'
 import { ref } from 'vue'
+import { UserPlus } from 'lucide-vue-next'
 
 const emit = defineEmits();
 
@@ -16,7 +17,7 @@ const toggleEdit = () => {
 const saveUser = async () => {
 	// send a request to the instacne backend with the updated info
 	try {
-		const response = await myAxios.post('/admin/user', {username: username.value, password: password.value, role: selectedRole.value});
+		const response = await myAxios.post('admin/user', {username: username.value, password: password.value, role: selectedRole.value});
 		emit('addUser');
 	} catch (error) {
 		console.error("Error posting user", error);
@@ -39,33 +40,32 @@ const cancelEdit = () => {
 <template>
 <div>
 	<div
-	v-if="editable === 'solid'"
-	class="group rounded-lg py-2 border-2 border-green-100 flex w-full hover:border-green-300 justify-center bg-gray-400"
-	@click="toggleEdit">
-		<p class="text-green-100">➕</p>
+		v-if="editable === 'solid'"
+		class="border-b border-zinc-700 flex w-full justify-center items-center px-3 py-2 bg-zinc-800 hover:bg-zinc-750 cursor-pointer group transition-colors"
+		@click="toggleEdit"
+	>
+		<UserPlus :size="14" class="text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+		<span class="text-xs text-zinc-500 group-hover:text-zinc-300 transition-colors ml-2">add user</span>
 	</div>
 
-
-	<div v-if="editable === 'edit'" class="group rounded-lg py-2 border-2 border-green-100 flex w-full bg-gray-300">
-		<div class="w-full flex mx-2 justify-between">
-			<p class="w-1/12 px-2">x</p>
-			<div class="w-3/12">
-				<input v-model="username" placeholder="Username" class="rounded-sm bg-green-100 text-black px-1" />
-			</div>
-			<div class="w-3/12">
-				<input type="password" v-model="password" placeholder="password" class="rounded-sm px-1 bg-green-100 text-black"/>
-			</div>
-			<div class="text-white w-3/12">
-				<select id="role" v-model="selectedRole" class="text-white">
-					<option value="Admin">Admin</option>
-					<option value="Mod">Mod</option>
-					<option value="User">User</option>
-				</select>
-			</div>
-			<div class="flex justify-end w-2/12 px-2">
-				<div class="pr-2"><button @click="cancelEdit">❌</button></div>
-				<button @click="saveUser" class="px-2 rounded-lg bg-teal-600 text-white">Save</button>
-			</div>
+	<div v-if="editable === 'edit'" class="border-b border-zinc-600 flex w-full items-center gap-2 px-3 py-2 bg-zinc-700 text-sm">
+		<p class="w-1/12 text-zinc-500">—</p>
+		<div class="w-3/12">
+			<input v-model="username" placeholder="Username" class="rounded-md bg-zinc-900 border border-zinc-600 text-zinc-100 placeholder-zinc-500 px-2 py-1 outline-none w-full text-sm" />
+		</div>
+		<div class="w-3/12">
+			<input type="password" v-model="password" placeholder="password" class="rounded-md bg-zinc-900 border border-zinc-600 text-zinc-100 placeholder-zinc-500 px-2 py-1 outline-none w-full text-sm" />
+		</div>
+		<div class="w-2/12">
+			<select id="role" v-model="selectedRole" class="bg-zinc-900 border border-zinc-600 text-zinc-100 rounded-md px-2 py-1 outline-none text-sm w-full">
+				<option value="Admin">Admin</option>
+				<option value="Mod">Mod</option>
+				<option value="User">User</option>
+			</select>
+		</div>
+		<div class="flex justify-end gap-2 w-2/12">
+			<button @click="cancelEdit" class="px-2 py-1 rounded-md bg-zinc-700 hover:bg-zinc-600 text-zinc-300 transition-colors text-xs">Cancel</button>
+			<button @click="saveUser" class="px-2 py-1 rounded-md bg-teal-700 hover:bg-teal-600 text-white transition-colors text-xs">Save</button>
 		</div>
 	</div>
 </div>

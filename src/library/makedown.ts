@@ -35,7 +35,7 @@ registry.add("##### ", { tag: `${dir}h5`, ...lineRule });
 registry.add("###### ", { tag: `${dir}h6`, ...lineRule });
 
 // Register Lists & Formatting
-registry.add(/ ?(?:- )?\[[ xX]\]/, {
+registry.add(/^ ?(?:- )?\[[ xX]\]/, {
 	tag: `${dir}checkbox`,
 	propProcessing: (str: string) => {
 		const checked = str.toLowerCase().includes("[x]");
@@ -45,8 +45,8 @@ registry.add(/ ?(?:- )?\[[ xX]\]/, {
 	 ...lineRule
 	}
 );
-registry.add(/ ?[-*+] /, { tag: `${dir}unorderedListItem`, ...lineRule });
-registry.add(/\d+\. /,       { tag: `${dir}orderedListItem`, ...lineRule, propProcessing: (str: string) => {
+registry.add(/^ ?[-*+] /, { tag: `${dir}unorderedListItem`, ...lineRule });
+registry.add(/^\d+\. /,       { tag: `${dir}orderedListItem`, ...lineRule, propProcessing: (str: string) => {
 	const numberMatch = str.match(/^(\d+)\. /);
 	return {number: numberMatch ? parseInt(numberMatch[1], 10) : 1};
 }});

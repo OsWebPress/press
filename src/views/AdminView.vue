@@ -23,17 +23,15 @@ onMounted(() => {
 
 <template>
 	<title>Admin Control</title>
-	<header>
+	<div class="min-h-screen flex flex-col bg-zinc-900">
 		<div class="w-full z-50">
 			<AdminNav />
 		</div>
-	</header>
-
-	<div class="w-full h-screen bg-gray-800"></div>
-	<div class="absolute top-1/6 left-1/8 bg-black">
-		<Login v-if="view === 'login'"/>
-		<div v-if="role === 'Admin'" class="w-[800px]">
-			<UserList class="w-full"/>
+		<div class="flex-1 flex items-start justify-center pt-16 px-8">
+			<Login v-if="view === 'login'" />
+			<div v-if="role === 'Admin'" class="w-[800px]">
+				<UserList class="w-full" />
+			</div>
 		</div>
 	</div>
 </template>
