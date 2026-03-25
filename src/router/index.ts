@@ -36,11 +36,11 @@ const router = createRouter({
 router.afterEach((to) => {
   if (to.path === '/') {
 	document.title = 'home';
-  if (to.name === 'renderer') {
+  } else if (to.name === 'renderer') {
     document.title = to.path.split('/').pop() || 'OsPress';
   } else {
 	document.title = to.name as string;
   }
-}})
+})
 
 export default router
