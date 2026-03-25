@@ -52,6 +52,26 @@ registry.add(/^\d+\. /,       { tag: `${dir}orderedListItem`, ...lineRule, propP
 }});
 registry.add("> ",           { tag: `${dir}blockquote`, ...lineRule });
 
+// Tables
+registry.add(/^\|.+/, {
+  tag: `${dir}table`,
+  findEnd: (str: string) => {
+    let pos = 0;
+    while (pos < str.length) {
+      const lineEnd = str.indexOf('\n', pos);
+      if (lineEnd === -1) {
+        if (!str.slice(pos).startsWith('|')) break;
+        pos = str.length;
+        break;
+      }
+      if (!str.slice(pos, lineEnd).startsWith('|')) break;
+      pos = lineEnd + 1;
+    }
+    return (pos > 0 && str[pos - 1] === '\n') ? pos - 1 : pos;
+  },
+  findBody: (str: string, size: number) => str.substring(0, size),
+});
+
 // Dividers
 registry.add("---", {
   tag: `${dir}horizontalRule`,
@@ -72,8 +92,13 @@ registry.add("```", {
     return closeIndex !== -1 ? closeIndex + 3 : str.length;
   },
   findBody: (str: string, size: number) => {
-    return str.substring(3, size - 3).trim();
-  }
+    const firstNewline = str.indexOf('\n');
+    const start = firstNewline !== -1 ? firstNewline + 1 : 3;
+    return str.substring(start, size - 3).trim();
+  },
+  propProcessing: (str: string) => ({
+    lang: str.match(/^```(\w+)/)?.[1] ?? ''
+  })
 });
 
 registry.add(/<!--.*?-->/, {
@@ -106,6 +131,14 @@ registry.add(/!!\[.*?\]\([^)]+\)/, {
 	};
   },
   ...selfClosingRule
+});
+
+registry.add(/`[^`]+`/, {
+  tag: `${dir}highlight`,
+  ...selfClosingRule,
+  propProcessing: (str: string) => ({
+    body: str.slice(1, -1)
+  })
 });
 
 registry.add(/\[.*?\]\([^)]+\)/, {
